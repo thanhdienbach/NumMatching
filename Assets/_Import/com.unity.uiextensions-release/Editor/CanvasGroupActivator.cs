@@ -2,9 +2,9 @@
 /// Sourced from - http://forum.unity3d.com/threads/scripts-useful-4-6-scripts-collection.264161/#post-1752415
 /// Notes - Mod from Yilmaz Kiymaz's editor scripts presentation at Unite 2013
 /// Updated simonDarksideJ - removed Linq use, not required.
-
+#if UNITY_EDITOR
 using UnityEditor;
-
+#endif
 namespace UnityEngine.UI.Extensions
 {
     public class CanvasGroupActivator : EditorWindow
@@ -35,7 +35,6 @@ namespace UnityEngine.UI.Extensions
             canvasGroups = GameObject.FindObjectsOfType<CanvasGroup>();
 #endif            
         }
-
         void OnGUI()
         {
             if (canvasGroups == null)

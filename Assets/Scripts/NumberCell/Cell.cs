@@ -4,9 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NumberCell : MonoBehaviour
+public class Cell : MonoBehaviour
 {
     public Button button;
+    public Color buttonColor;
     public TMP_Text text;
     public Vector2Int position;
     public int value;
@@ -16,6 +17,7 @@ public class NumberCell : MonoBehaviour
     private void OnEnable()
     {
         button = GetComponent<Button>();
+        buttonColor = button.GetComponent<Image>().color;
         text = button.GetComponentInChildren<TMP_Text>();
     }
 

@@ -298,6 +298,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GamePlayManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5415310758100887734, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
+      propertyPath: numberCell1
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5415310758100887735, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -342,6 +346,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5415310758341810784, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
+      propertyPath: m_Name
+      value: BoardManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415310758341810789, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
+      propertyPath: cellPrefabs
+      value: 
+      objectReference: {fileID: 2150126540328717245, guid: e3d8151edbdd6f6438ae73d4495f7449, type: 3}
     - target: {fileID: 5415310758341810789, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
       propertyPath: maxCellFilled
       value: 27

@@ -6,7 +6,7 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     [Header("Game object")]
-    [SerializeField] NumberCell numberCellPrefabs;
+    [SerializeField] Cell cellPrefabs;
 
     [Header("Board size")]
     [SerializeField] int colums = 9;
@@ -15,9 +15,9 @@ public class BoardManager : MonoBehaviour
     [SerializeField] Transform contentRectTransform;
 
     [Header("Board handle Cell")]
-    [SerializeField] NumberCell[] numberCells;
-    [SerializeField] int minValueOfNumberCell = 1;
-    [SerializeField] int maxValueOfNumberCell = 9;
+    [SerializeField] Cell[] cells;
+    public int minValueOfCell = 1;
+    public int maxValueOfCell = 9;
 
     public void Init()
     {
@@ -31,12 +31,12 @@ public class BoardManager : MonoBehaviour
     {
         for (int i = 0; i < colums * rows; i++)
         {
-            NumberCell numberCell = Instantiate(numberCellPrefabs, contentRectTransform);
-            numberCell.position = SetPositionNumberCell(i);
+            Cell cell = Instantiate(cellPrefabs, contentRectTransform);
+            cell.position = SetPositionNumberCell(i);
 
             if (i < maxCellFilled)
             {
-                numberCell.AwakeCell(minValueOfNumberCell, maxValueOfNumberCell);
+                cell.AwakeCell(minValueOfCell, maxValueOfCell);
             }
         }
     }

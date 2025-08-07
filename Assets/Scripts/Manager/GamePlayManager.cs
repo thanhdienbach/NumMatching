@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class GamePlayManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Component")]
+    public UIManager uIManager;
 
-    // Update is called once per frame
-    void Update()
+
+    private void Start()
     {
-        
+        Init();
+    }
+    public void Init()
+    {
+        uIManager = GetComponentInChildren<UIManager>();
+        uIManager.Init();
     }
 }

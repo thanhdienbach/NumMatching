@@ -284,11 +284,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 0}
-  buttonColor: {r: 0, g: 0, b: 0, a: 0}
   text: {fileID: 0}
   position: {x: 0, y: 0}
   value: 0
-  isMatched: 0
+  isMatched: 1
   isGemCell: 0
 --- !u!114 &5863661617664248807
 MonoBehaviour:

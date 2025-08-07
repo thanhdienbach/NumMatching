@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1805451413
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1805451414}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1805451414
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805451413}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5415310758100887735}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5415310756590467443
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,7 +66,7 @@ RectTransform:
   - {fileID: 5415310758352109943}
   - {fileID: 5415310758341810785}
   m_Father: {fileID: 5415310758100887735}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -222,6 +253,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1805451414}
   - {fileID: 5415310756590467444}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -239,6 +271,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uIManager: {fileID: 0}
+  boardManager: {fileID: 0}
+  cell1: {fileID: 0}
+  cell2: {fileID: 0}
+  direction:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
 --- !u!1 &5415310758300168433
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,7 +388,7 @@ GameObject:
   - component: {fileID: 5415310758341810786}
   - component: {fileID: 5415310758341810789}
   m_Layer: 5
-  m_Name: BoardGame
+  m_Name: BoardManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -451,14 +495,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5022fbbd1dd67744fbaebc12c476b284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberCellPrefabs: {fileID: 2150126540328717245, guid: e3d8151edbdd6f6438ae73d4495f7449, type: 3}
+  cellPrefabs: {fileID: 2150126540328717245, guid: e3d8151edbdd6f6438ae73d4495f7449, type: 3}
   colums: 9
   rows: 12
-  maxCellFilled: 0
-  contentRectTransform: {fileID: 0}
-  numberCells: []
-  minValueOfNumberCell: 1
-  maxValueOfNumberCell: 9
+  maxCellFilled: 60
+  contentRectTransform: {fileID: 5415310757373813086}
+  cells: []
+  minValueOfCell: 1
+  maxValueOfCell: 9
 --- !u!1 &5415310758352109942
 GameObject:
   m_ObjectHideFlags: 0

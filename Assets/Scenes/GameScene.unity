@@ -206,11 +206,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!224 &876205590 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5415310757373813086, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
-  m_PrefabInstance: {fileID: 5415310756636260168}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1489577338
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,6 +274,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1805451413 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1805451413, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
+  m_PrefabInstance: {fileID: 5415310756636260168}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1805451415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805451413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8d5a5e65d74816448f90777cd3494d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5415310756636260168
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -286,21 +298,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5415310756590467447, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
-      propertyPath: m_RenderMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5415310756590467447, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
-      propertyPath: m_VertexColorAlwaysGammaSpace
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5415310758100887733, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
       propertyPath: m_Name
       value: GamePlayManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5415310758100887734, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
-      propertyPath: numberCell1
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5415310758100887735, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
       propertyPath: m_RootOrder
@@ -346,21 +346,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5415310758341810784, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
-      propertyPath: m_Name
-      value: BoardManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5415310758341810789, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
-      propertyPath: cellPrefabs
-      value: 
-      objectReference: {fileID: 2150126540328717245, guid: e3d8151edbdd6f6438ae73d4495f7449, type: 3}
-    - target: {fileID: 5415310758341810789, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
-      propertyPath: maxCellFilled
-      value: 27
-      objectReference: {fileID: 0}
-    - target: {fileID: 5415310758341810789, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}
-      propertyPath: contentRectTransform
-      value: 
-      objectReference: {fileID: 876205590}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2dcea624b8c3cce4d86719a3050ad968, type: 3}

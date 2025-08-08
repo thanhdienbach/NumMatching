@@ -17,8 +17,13 @@ public class AudioManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    public void PlayChooseNumberOneShot(AudioClip _audioClip)
+    public void PlayAudioClipOneShot(AudioClip _audioClip)
     {
         audioSource.PlayOneShot(_audioClip);
+    }
+
+    public void PlayPop2OneShot()
+    {
+        audioSource.PlayOneShot(pop2);
     }
 }

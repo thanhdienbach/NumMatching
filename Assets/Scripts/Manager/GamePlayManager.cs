@@ -28,6 +28,7 @@ public class GamePlayManager : MonoBehaviour
     [SerializeField] AudioManager audioManager;
     [SerializeField] UIManager uIManager;
     [SerializeField] BoardManager boardManager;
+    [SerializeField] PlayingPanle playingPanle;
 
     [Header("Matching number variable")]
     [SerializeField] Cell cell1;
@@ -44,6 +45,10 @@ public class GamePlayManager : MonoBehaviour
         new Vector2(1, 1),
         
     };
+
+    [Header("Add numbers variable")]
+    public int addNumbersNumber;
+    [SerializeField] int firstCellFreezeIndex;
     #endregion
 
     private void Start()
@@ -52,10 +57,15 @@ public class GamePlayManager : MonoBehaviour
     }
     public void Init()
     {
+        addNumbersNumber = 5;
+
         audioManager = GetComponentInChildren<AudioManager>();
         audioManager.Init();
+
         uIManager = GetComponentInChildren<UIManager>();
         uIManager.Init();
+
+        playingPanle = uIManager.playingPanle;
 
         boardManager = uIManager.boardManager;
     }
@@ -64,6 +74,7 @@ public class GamePlayManager : MonoBehaviour
     // Handle cell if have any click from cell
     public void OnClickEventHandle(ButtonClick _click)
     {
+        audioManager.PlayAudioClipOneShot(audioManager.chooseNumber);
         AssignCells(_click);
 
         if (cell1 != null && cell2 != null)
@@ -171,6 +182,10 @@ public class GamePlayManager : MonoBehaviour
     }
     Cell NextCell(Vector2Int _position)
     {
+        if (_position.x < 1 || _position.y < 1 || _position.x > boardManager.cells.Count / boardManager.colums || _position.y > boardManager.colums)
+        {
+            return null;
+        }
         int startIndexOfCell = ((_position.x - 1) * boardManager.colums);
         for (int i = startIndexOfCell; i < startIndexOfCell + boardManager.colums; i++)
         {
@@ -186,6 +201,7 @@ public class GamePlayManager : MonoBehaviour
     #region Handle affter cells matching
     void HandleMatchingCells(Cell _cell1, Cell _cell2)
     {
+        audioManager.PlayAudioClipOneShot(audioManager.pairClear);
         _cell1.FrezeeCell();
         _cell2.FrezeeCell();
         cell1 = null;
@@ -204,18 +220,35 @@ public class GamePlayManager : MonoBehaviour
             if (IsClearedRow(_row1))
             {
                 boardManager.ClearRowHandle(_row1);
+                audioManager.PlayAudioClipOneShot(audioManager.rowClear);
             }
         }
         else if (_row1 != _row2)
         {
+            bool isclearRow1 = false;
             if (IsClearedRow(_row1))
             {
                 boardManager.ClearRowHandle(_row1);
+                audioManager.PlayAudioClipOneShot(audioManager.rowClear);
+                isclearRow1 = true;
             }
-            if (IsClearedRow(_row2 - 1))
+            if (isclearRow1)
             {
-                boardManager.ClearRowHandle(_row2 - 1);
+                if (IsClearedRow(_row2 - 1))
+                {
+                    boardManager.ClearRowHandle(_row2 - 1);
+                    audioManager.PlayAudioClipOneShot(audioManager.rowClear);
+                }
             }
+            else
+            {
+                if (IsClearedRow(_row2))
+                {
+                    boardManager.ClearRowHandle(_row2);
+                    audioManager.PlayAudioClipOneShot(audioManager.rowClear);
+                }
+            }
+            
         }
     }
     bool IsClearedRow(int _row)
@@ -230,6 +263,61 @@ public class GamePlayManager : MonoBehaviour
             }
         }
         return countMatchedCell == boardManager.colums;
+    }
+    #endregion
+
+    #region Add numbers handle
+    public void AddNumberHandle()
+    {
+        UpdateAddNumbersNumber();
+
+        List<int> cloneNumbers = GetNumberList();
+        if (cloneNumbers.Count > boardManager.cells.Count - firstCellFreezeIndex)
+        {
+            GenerateEmptyCell(cloneNumbers.Count, boardManager.cells.Count - firstCellFreezeIndex);
+        }
+
+        boardManager.AwakeCells(cloneNumbers, firstCellFreezeIndex);
+    }
+    void UpdateAddNumbersNumber()
+    {
+        addNumbersNumber -= 1;
+        if (addNumbersNumber <= 0)
+        {
+            playingPanle.addNumbersButton.interactable = false;
+        }
+        else
+        {
+            playingPanle.addNumbersButton.interactable = true;
+        }
+        playingPanle.SetAddNumbersNumberText(addNumbersNumber);
+    }
+    // Clone all not matched number
+    List<int> GetNumberList()
+    {
+        List<int> ints = new List<int>();
+        for (int i = 0; i < boardManager.cells.Count; i++)
+        {
+            if (!boardManager.cells[i].isMatched)
+            {
+                ints.Add(boardManager.cells[i].value);
+            }
+            if (boardManager.cells[i].value < 1)
+            {
+                firstCellFreezeIndex = i;
+                break;
+            }
+        }
+        return ints;
+    }
+    void GenerateEmptyCell(int _numberNeedToAdd, int _availebleCell)
+    {
+        int numberCellsNeedToGenetate = _numberNeedToAdd - _availebleCell;
+        if (numberCellsNeedToGenetate > 0)
+        {
+            numberCellsNeedToGenetate += (boardManager.colums - (numberCellsNeedToGenetate + boardManager.cells.Count) % boardManager.colums);
+            boardManager.GenerateEmptyCell(numberCellsNeedToGenetate);
+        }
     }
     #endregion
 }

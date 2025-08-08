@@ -20,12 +20,10 @@ public class Cell : MonoBehaviour
     }
 
     // Awake numbercell from emptycell (Add value and set interactable = true). Number cell have value and player can interrac affter awake
-    public void AwakeCell(int _minValue, int _maxValue)
+    public void AwakeCell(int _value)
     {
-        int randomvalue = Random.Range(_minValue, 3);
-
-        value = randomvalue;
-        text.text = randomvalue.ToString();
+        value = _value;
+        text.text = value.ToString();
 
         button.interactable = true;
 

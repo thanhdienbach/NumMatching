@@ -11,7 +11,7 @@ public class BoardManager : MonoBehaviour
     [Header("Board size")]
     public int colums = 9;
     [SerializeField] int rows = 12;
-    [SerializeField] int maxCellFilled = 27;
+    [SerializeField] int maxCellFilled = 42;
     [SerializeField] Transform contentRectTransform;
 
     [Header("Board handle Cell")]
@@ -22,7 +22,7 @@ public class BoardManager : MonoBehaviour
     public void Init()
     {
         GenerateEmptyCell(colums * rows);
-        GenerateValue();
+        AwakeCellsFirstTime(GenerateNumber(maxCellFilled));
     }
 
     /// <summary>
@@ -38,13 +38,29 @@ public class BoardManager : MonoBehaviour
             cells.Add(cell);
         }
     }
-    void GenerateValue()
+    public void AwakeCellsFirstTime(List<int> _numberList)
     {
         for (int i = 0; i < maxCellFilled; i++)
         {
-            cells[i].AwakeCell(minValueOfCell, maxValueOfCell);
+            cells[i].AwakeCell(_numberList[i]);
         }
-        
+    }
+    List<int> GenerateNumber(int _count)
+    {
+        List<int> numbers = new List<int>();
+        for (int i = 0; i < _count; i++)
+        {
+            int randomValue = Random.Range(minValueOfCell, 3);
+            numbers.Add(randomValue);
+        }
+        return numbers;
+    }
+    public void AwakeCells(List<int> _numberList, int _firstAwakeCell)
+    {
+        for (int i = _firstAwakeCell; i < _firstAwakeCell + _numberList.Count; i++)
+        {
+            cells[i].AwakeCell(_numberList[i - _firstAwakeCell]);
+        }
     }
     // Caculate position of numbercell by index of it in array
     Vector2Int SetPositionNumberCell(int _index)
@@ -58,7 +74,7 @@ public class BoardManager : MonoBehaviour
     public void ClearRowHandle(int _row)
     {
         int startIndex = (_row - 1) * colums;
-        if (cells.Count > colums * rows - 1)
+        if (cells.Count < colums * rows + 1)
         {
             GenerateEmptyCell(colums);
         }
@@ -75,4 +91,5 @@ public class BoardManager : MonoBehaviour
             cells[i].position.x -= 1;
         }
     }
+
 }

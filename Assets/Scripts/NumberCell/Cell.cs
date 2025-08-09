@@ -11,6 +11,7 @@ public class Cell : MonoBehaviour
     public Vector2Int position;
     public int value;
     public bool isMatched = true;
+    public bool canMatching;
     public bool isGemCell;
 
     private void OnEnable()
@@ -28,6 +29,16 @@ public class Cell : MonoBehaviour
         button.interactable = true;
 
         isMatched = false;
+    }
+
+    public void ReAwakeCell()
+    {
+        value = 0;
+        text.text = "";
+
+        button.interactable = false;
+
+        isMatched = true;
     }
 
     public void FrezeeCell()

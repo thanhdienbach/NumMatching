@@ -33,22 +33,14 @@ public class GamePlayManager : MonoBehaviour
     [Header("Matching number variable")]
     [SerializeField] Cell cell1;
     [SerializeField] Cell cell2;
-    [SerializeField] Vector2[] direction = new Vector2[]
-    {
-        new Vector2(-1, -1),
-        new Vector2(-1, 0),
-        new Vector2(-1, 1),
-        new Vector2(0, -1),
-        new Vector2(0, 1),
-        new Vector2(1, -1),
-        new Vector2(1, 0),
-        new Vector2(1, 1),
-        
-    };
 
     [Header("Add numbers variable")]
     public int addNumbersNumber;
     [SerializeField] int firstCellFreezeIndex;
+
+    [Header("State variable")]
+    public int state = 1;
+
     #endregion
 
     private void Start()

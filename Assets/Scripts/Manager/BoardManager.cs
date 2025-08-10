@@ -76,43 +76,49 @@ public class BoardManager : MonoBehaviour
     #region Generateboard
     public void GenerateBoard(int _state)
     {
-        for (int i = 0; i < startCellFilled + (colums - startCellFilled % colums); ++i)
-        {
-            if (i >= startCellFilled && ((i / colums) + 1) % 2 == 0)
-            {
-                numbers.Add(baseNumbers1[i % colums]);
-            }
-            else if (i >= startCellFilled && ((i / colums) + 1) % 2 == 1)
-            {
-                numbers.Add(baseNumbers2[i % colums]);
-            }
-            else if (((i / colums) + 1) % 2  == 0)
-            {
-                cells[i].AwakeCell(baseNumbers1[i % colums]);
-            }
-            else
-            {
-                cells[i].AwakeCell(baseNumbers2[i % colums]);
-            }
-        }
+        //for (int i = 0; i < startCellFilled + (colums - startCellFilled % colums); ++i)
+        //{
+        //    if (i >= startCellFilled && ((i / colums) + 1) % 2 == 0)
+        //    {
+        //        numbers.Add(baseNumbers1[i % colums]);
+        //    }
+        //    else if (i >= startCellFilled && ((i / colums) + 1) % 2 == 1)
+        //    {
+        //        numbers.Add(baseNumbers2[i % colums]);
+        //    }
+        //    else if (((i / colums) + 1) % 2  == 0)
+        //    {
+        //        cells[i].AwakeCell(baseNumbers1[i % colums]);
+        //    }
+        //    else
+        //    {
+        //        cells[i].AwakeCell(baseNumbers2[i % colums]);
+        //    }
+        //}
 
-        ShuffleCellValue(startCellFilled);
+        //ShuffleCellValue(startCellFilled);
 
-        int pairNumbersCount = 0;
-        if (_state == 1)
-        {
-            pairNumbersCount = 3;
-        }
-        else if (_state == 2)
-        {
-            pairNumbersCount = 2;
-        }
-        else
-        {
-            pairNumbersCount = 1;
-        }
+        //int pairNumbersCount = 0;
+        //if (_state == 1)
+        //{
+        //    pairNumbersCount = 3;
+        //}
+        //else if (_state == 2)
+        //{
+        //    pairNumbersCount = 2;
+        //}
+        //else
+        //{
+        //    pairNumbersCount = 1;
+        //}
 
-        ArrangePairNumber(pairNumbersCount);
+        //ArrangePairNumber(pairNumbersCount);
+
+        for (int i = 0; i < startCellFilled; i++)
+        {
+            cells[i].AwakeCell(i % colums + 1);
+        }
+        gamePlayManager.countAllNumbers = startCellFilled;
     }
     void ShuffleCellValue(int _count)
     {
@@ -166,12 +172,11 @@ public class BoardManager : MonoBehaviour
     {
         for (int i = 0; i < _pairNumbersCount; i++)
         {
-            Debug.Log($"{i} / {_pairNumbersCount}");
             int indexCell1 = Random.Range(0, startCellFilled);
             Cell cell1 = cells[indexCell1];
             Debug.Log(cell1.position);
 
-            for (int j = 0; j < 1000; j++) // Waring: Đảm bảo phải có break và có thể break. 
+            for (int j = 0; j < 1000; j++) 
             {
                 int indexCell2 = Random.Range(0, startCellFilled);
                 Cell cell2 = cells[indexCell2];

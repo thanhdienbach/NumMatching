@@ -40,6 +40,7 @@ public class GamePlayManager : MonoBehaviour
 
     [Header("State variable")]
     public int state = 1;
+    public int countAllNumbers;
 
     #endregion
 
@@ -58,6 +59,7 @@ public class GamePlayManager : MonoBehaviour
         uIManager.Init();
 
         playingPanle = uIManager.playingPanle;
+        playingPanle.SetAddStateText(state);
 
         boardManager = uIManager.boardManager;
     }
@@ -198,6 +200,9 @@ public class GamePlayManager : MonoBehaviour
         _cell2.FrezeeCell();
         cell1 = null;
         cell2 = null;
+
+        countAllNumbers -= 2;
+        CheckCountAllNumbers();
     }
     void UpdateBoard(int _row1, int _row2)
     {
@@ -270,6 +275,8 @@ public class GamePlayManager : MonoBehaviour
         }
 
         boardManager.AwakeCells(cloneNumbers, firstCellFreezeIndex);
+
+        countAllNumbers *= 2;
     }
     void UpdateAddNumbersNumber()
     {
@@ -310,6 +317,26 @@ public class GamePlayManager : MonoBehaviour
             numberCellsNeedToGenetate += (boardManager.colums - (numberCellsNeedToGenetate + boardManager.cells.Count) % boardManager.colums);
             boardManager.GenerateEmptyCell(numberCellsNeedToGenetate);
         }
+    }
+    #endregion
+
+    #region Statehandle
+    void CheckCountAllNumbers()
+    {
+        if (countAllNumbers == 0)
+        {
+            GenerateNewBoard();
+        }
+    }
+    void GenerateNewBoard()
+    {
+        state += 1;
+        playingPanle.SetAddStateText(state);
+
+        addNumbersNumber = 5;
+        playingPanle.SetAddNumbersNumberText(addNumbersNumber);
+
+        boardManager.GenerateBoard(state);
     }
     #endregion
 }

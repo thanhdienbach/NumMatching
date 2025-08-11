@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 
 public class BoardManager : MonoBehaviour
 {
+    #region Variable
     [Header("Component")]
     [SerializeField] GamePlayManager gamePlayManager;
 
@@ -16,13 +17,14 @@ public class BoardManager : MonoBehaviour
     [Header("Board size")]
     public int colums = 9;
     [SerializeField] int rows = 12;
-    [SerializeField] int startCellFilled = 42;
+    public int startCellFilled = 42;
     [SerializeField] Transform contentRectTransform;
 
     [Header("Board handle Cell")]
     public List<Cell> cells;
     public int minValueOfCell = 1;
     public int maxValueOfCell = 9;
+    public bool generatedEmptycell = false;
 
     [Header("Generate munber with condition variable")]
     [SerializeField] List<int> numbers = new List<int>();
@@ -42,13 +44,24 @@ public class BoardManager : MonoBehaviour
     };
     [SerializeField] bool assigned;
     [SerializeField] int countLoop = 0;
-    public void Init()
+
+    [Header("Gem mode variable")]
+    [SerializeField] int gemTileAppearanceRate;
+    [SerializeField] int lastIndexOfCellWillAppearanceGem;
+    [SerializeField] int maxCountOfGemsWhenAddNumbers;
+    [SerializeField] List<Sprite> gemSprite;
+    [SerializeField] List<int> gemType = new List<int>() { 1,2,1,2,1,2,1,2};
+    #endregion
+
+    public void Init(Mode _mode)
     {
+        gameObject.SetActive(true);
+
         gamePlayManager = GamePlayManager.instance;
 
         GenerateEmptyCell(colums * rows);
 
-        GenerateBoard(gamePlayManager.state);
+        GenerateBoard(gamePlayManager.state, _mode, 0, startCellFilled);
     }
 
     /// <summary>
@@ -74,9 +87,10 @@ public class BoardManager : MonoBehaviour
     }
 
     #region Generateboard
-    public void GenerateBoard(int _state)
+    public void GenerateBoard(int _state, Mode _mode, int _firstIndexWillAddNumber, int _countOfAddNumbers)
     {
-        //for (int i = 0; i < startCellFilled + (colums - startCellFilled % colums); ++i)
+
+        //for (int i = 0; i < startCellFilled + (colums - startCellFilled % colums); i++)
         //{
         //    if (i >= startCellFilled && ((i / colums) + 1) % 2 == 0)
         //    {
@@ -86,7 +100,7 @@ public class BoardManager : MonoBehaviour
         //    {
         //        numbers.Add(baseNumbers2[i % colums]);
         //    }
-        //    else if (((i / colums) + 1) % 2  == 0)
+        //    else if (((i / colums) + 1) % 2 == 0)
         //    {
         //        cells[i].AwakeCell(baseNumbers1[i % colums]);
         //    }
@@ -118,6 +132,12 @@ public class BoardManager : MonoBehaviour
         {
             cells[i].AwakeCell(i % colums + 1);
         }
+
+        if (_mode == Mode.Gem)
+        {
+            GenerateGem(_firstIndexWillAddNumber, _countOfAddNumbers);
+        }
+
         gamePlayManager.countAllNumbers = startCellFilled;
     }
     void ShuffleCellValue(int _count)
@@ -174,7 +194,6 @@ public class BoardManager : MonoBehaviour
         {
             int indexCell1 = Random.Range(0, startCellFilled);
             Cell cell1 = cells[indexCell1];
-            Debug.Log(cell1.position);
 
             for (int j = 0; j < 1000; j++) 
             {
@@ -217,6 +236,7 @@ public class BoardManager : MonoBehaviour
     }
     #endregion
 
+    #region Handle board
     public void AwakeCells(List<int> _numberList, int _firstAwakeCell)
     {
         for (int i = _firstAwakeCell; i < _firstAwakeCell + _numberList.Count; i++)
@@ -227,6 +247,7 @@ public class BoardManager : MonoBehaviour
     public void ClearRowHandle(int _row)
     {
         int startIndex = (_row - 1) * colums;
+
         if (cells.Count < colums * rows + 1)
         {
             GenerateEmptyCell(colums);
@@ -244,5 +265,56 @@ public class BoardManager : MonoBehaviour
             cells[i].position.x -= 1;
         }
     }
+    #endregion
 
+    #region Generate gem
+    public void GenerateGem(int _firstIndexWillAddNumber, int _countOfAddNumbers)
+    {
+        lastIndexOfCellWillAppearanceGem = Mathf.CeilToInt((_countOfAddNumbers + 1) / 2) + _firstIndexWillAddNumber;
+        maxCountOfGemsWhenAddNumbers = gamePlayManager.countOfGemType;
+        int currentCountOfGemAppearanced = 0;
+
+        for(int i = _firstIndexWillAddNumber; i < _firstIndexWillAddNumber + _countOfAddNumbers; i++)
+        {
+            gemTileAppearanceRate = Random.Range(5, 8);
+            int random = Random.Range(0, 101);
+            bool isGemCell = random < gemTileAppearanceRate;
+            if (i == lastIndexOfCellWillAppearanceGem - 1)
+            {
+                isGemCell = true;
+                
+            }
+            if (isGemCell)
+            {
+                lastIndexOfCellWillAppearanceGem += i;
+                currentCountOfGemAppearanced++;
+                HandleGemCell(cells[i]);
+                if (currentCountOfGemAppearanced == maxCountOfGemsWhenAddNumbers)
+                {
+                    lastIndexOfCellWillAppearanceGem = 0;
+                    return;
+                }
+            }
+        }
+    }
+    void HandleGemCell(Cell _cell)
+    {
+        if (gemType.Count == 0) { return; }
+
+        _cell.isGemCell = true;
+
+        int randomIndex = Random.Range(0, gemType.Count);
+        if (gemType[randomIndex] == 1)
+        {
+            _cell.gemType = GemType.Gem1;
+            _cell.button.image.sprite = gemSprite[0];
+        }
+        else if (gemType[randomIndex] == 2)
+        {
+            _cell.gemType = GemType.Gem2;
+            _cell.button.image.sprite = gemSprite[1];
+        }
+        gemType.Remove(gemType[randomIndex]);
+    }
+    #endregion
 }

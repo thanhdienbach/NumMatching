@@ -288,7 +288,9 @@ MonoBehaviour:
   position: {x: 0, y: 0}
   value: 0
   isMatched: 1
+  canMatching: 0
   isGemCell: 0
+  gemType: -1
 --- !u!114 &5863661617664248807
 MonoBehaviour:
   m_ObjectHideFlags: 0

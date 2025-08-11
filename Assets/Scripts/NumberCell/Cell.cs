@@ -4,6 +4,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public enum GemType
+{
+    None = -1,
+    Gem1 = 1,
+    Gem2 = 2
+}
+
 public class Cell : MonoBehaviour
 {
     public Button button;
@@ -13,6 +21,7 @@ public class Cell : MonoBehaviour
     public bool isMatched = true;
     public bool canMatching;
     public bool isGemCell;
+    public GemType gemType = GemType.None;
 
     private void OnEnable()
     {

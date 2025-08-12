@@ -50,7 +50,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] int lastIndexOfCellWillAppearanceGem;
     [SerializeField] int maxCountOfGemsWhenAddNumbers;
     [SerializeField] List<Sprite> gemSprite;
-    [SerializeField] List<int> gemType = new List<int>() { 1,2,1,2,1,2,1,2};
+    [SerializeField] List<int> gemType;
     #endregion
 
     public void Init(Mode _mode)
@@ -58,6 +58,16 @@ public class BoardManager : MonoBehaviour
         gameObject.SetActive(true);
 
         gamePlayManager = GamePlayManager.instance;
+
+        if (gamePlayManager.mode == Mode.Gem)
+        {
+            gemType = new List<int>() { 1, 2, 1, 2, 1, 2, 1, 2 };
+            gamePlayManager.currentNumberOfGem1NeedToCollect = 4;
+            gamePlayManager.uIManager.playingPanle.SetGem1Text(gamePlayManager.currentNumberOfGem1NeedToCollect);
+            gamePlayManager.currentNumberOfGem2NeedToCollect = 4;
+            gamePlayManager.uIManager.playingPanle.SetGem2Text(gamePlayManager.currentNumberOfGem2NeedToCollect);
+            gamePlayManager.countOfGemType = 2;
+        }
 
         GenerateEmptyCell(colums * rows);
 
@@ -90,48 +100,48 @@ public class BoardManager : MonoBehaviour
     public void GenerateBoard(int _state, Mode _mode, int _firstIndexWillAddNumber, int _countOfAddNumbers)
     {
 
-        //for (int i = 0; i < startCellFilled + (colums - startCellFilled % colums); i++)
-        //{
-        //    if (i >= startCellFilled && ((i / colums) + 1) % 2 == 0)
-        //    {
-        //        numbers.Add(baseNumbers1[i % colums]);
-        //    }
-        //    else if (i >= startCellFilled && ((i / colums) + 1) % 2 == 1)
-        //    {
-        //        numbers.Add(baseNumbers2[i % colums]);
-        //    }
-        //    else if (((i / colums) + 1) % 2 == 0)
-        //    {
-        //        cells[i].AwakeCell(baseNumbers1[i % colums]);
-        //    }
-        //    else
-        //    {
-        //        cells[i].AwakeCell(baseNumbers2[i % colums]);
-        //    }
-        //}
+        for (int i = 0; i < startCellFilled + (colums - startCellFilled % colums); i++)
+        {
+            if (i >= startCellFilled && ((i / colums) + 1) % 2 == 0)
+            {
+                numbers.Add(baseNumbers1[i % colums]);
+            }
+            else if (i >= startCellFilled && ((i / colums) + 1) % 2 == 1)
+            {
+                numbers.Add(baseNumbers2[i % colums]);
+            }
+            else if (((i / colums) + 1) % 2 == 0)
+            {
+                cells[i].AwakeCell(baseNumbers1[i % colums]);
+            }
+            else
+            {
+                cells[i].AwakeCell(baseNumbers2[i % colums]);
+            }
+        }
 
         //ShuffleCellValue(startCellFilled);
 
-        //int pairNumbersCount = 0;
-        //if (_state == 1)
-        //{
-        //    pairNumbersCount = 3;
-        //}
-        //else if (_state == 2)
-        //{
-        //    pairNumbersCount = 2;
-        //}
-        //else
-        //{
-        //    pairNumbersCount = 1;
-        //}
-
-        //ArrangePairNumber(pairNumbersCount);
-
-        for (int i = 0; i < startCellFilled; i++)
+        int pairNumbersCount = 0;
+        if (_state == 1)
         {
-            cells[i].AwakeCell(i % colums + 1);
+            pairNumbersCount = 3;
         }
+        else if (_state == 2)
+        {
+            pairNumbersCount = 2;
+        }
+        else
+        {
+            pairNumbersCount = 1;
+        }
+
+        ArrangePairNumber(pairNumbersCount);
+
+        //for (int i = 0; i < startCellFilled; i++)
+        //{
+        //    cells[i].AwakeCell(i % colums + 1);
+        //}
 
         if (_mode == Mode.Gem)
         {

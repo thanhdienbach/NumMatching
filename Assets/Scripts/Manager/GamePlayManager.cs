@@ -44,9 +44,10 @@ public class GamePlayManager : MonoBehaviour
 
     [Header("Gem mode variable")]
     public Mode mode = new Mode();
-    public int numberOfGem1NeedToCollect = 4;
-    public int numberOfGem2NeedToCollect = 4;
-    public int countOfGemType = 2;
+    public int currentNumberOfGem1NeedToCollect;
+    public int currentNumberOfGem2NeedToCollect;
+    public int countOfGemType;
+    public int countOfAllGemCollented;
 
     #endregion
 
@@ -362,14 +363,24 @@ public class GamePlayManager : MonoBehaviour
     {
         if (_cell.gemType == GemType.Gem1)
         {
-            numberOfGem1NeedToCollect -= 1;
-            playingPanle.SetGem1Text(numberOfGem1NeedToCollect);
+            currentNumberOfGem1NeedToCollect -= 1;
+            playingPanle.SetGem1Text(currentNumberOfGem1NeedToCollect);
+            countOfAllGemCollented++;
         }
         else if (_cell.gemType == GemType.Gem2)
         {
-            numberOfGem2NeedToCollect -= 1;
-            playingPanle.SetGem2Text(numberOfGem2NeedToCollect);
+            currentNumberOfGem2NeedToCollect -= 1;
+            playingPanle.SetGem2Text(currentNumberOfGem2NeedToCollect);
+            countOfAllGemCollented++;
         }
+        if (currentNumberOfGem1NeedToCollect == 0 && currentNumberOfGem2NeedToCollect == 0)
+        {
+            WinGemModeHandle();
+        }
+    }
+    void WinGemModeHandle()
+    {
+        Debug.Log("You win");
     }
     #endregion
 }

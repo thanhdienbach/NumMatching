@@ -29,9 +29,9 @@ public class PlayingPanle : MonoBehaviour
         if (_mode == Mode.Gem)
         {
             gem1.gameObject.SetActive(true);
-            textOfGem1.text = GamePlayManager.instance.numberOfGem1NeedToCollect.ToString();
+            textOfGem1.text = GamePlayManager.instance.currentNumberOfGem1NeedToCollect.ToString();
             gem2.gameObject.SetActive(true);
-            textOfGem2.text = GamePlayManager.instance.numberOfGem2NeedToCollect.ToString();
+            textOfGem2.text = GamePlayManager.instance.currentNumberOfGem2NeedToCollect.ToString();
         }
     }
 

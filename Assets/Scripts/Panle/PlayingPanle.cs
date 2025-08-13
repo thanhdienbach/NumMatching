@@ -11,7 +11,11 @@ public class PlayingPanle : MonoBehaviour
     [Header("Enement")]
     public TMP_Text addNumbersNumberText;
     public Button addNumbersButton;
+
     public TMP_Text stateText;
+
+    public Image winImage;
+    public Image loseImage;
 
     public Button gem1;
     public TMP_Text textOfGem1;
@@ -20,13 +24,11 @@ public class PlayingPanle : MonoBehaviour
 
     public Button homeButton;
 
-    public void Init(Mode _mode)
+    public void Init()
     {
         gameObject.SetActive(true);
-        SetAddNumbersNumberText(GamePlayManager.instance.addNumbersNumber);
-        SetAddStateText(GamePlayManager.instance.state);
 
-        if (_mode == Mode.Gem)
+        if (GamePlayManager.instance.mode == Mode.Gem)
         {
             gem1.gameObject.SetActive(true);
             textOfGem1.text = GamePlayManager.instance.currentNumberOfGem1NeedToCollect.ToString();
@@ -40,7 +42,7 @@ public class PlayingPanle : MonoBehaviour
         addNumbersNumberText.text = _value.ToString();
     }
 
-    public void SetAddStateText(int _state)
+    public void SetStateText(int _state)
     {
         stateText.text = "State " + _state.ToString();
     }
@@ -58,12 +60,17 @@ public class PlayingPanle : MonoBehaviour
     {
         GamePlayManager.instance.uIManager.modePanle.gameObject.SetActive(true);
 
-        for (int i = 0; i < GamePlayManager.instance.uIManager.boardManager.cells.Count; i++)
-        {
-            Destroy(GamePlayManager.instance.uIManager.boardManager.cells[i].gameObject);
-        }
-        GamePlayManager.instance.uIManager.boardManager.cells.Clear();
+        GamePlayManager.instance.boardManager.ClearBoardData();
         GamePlayManager.instance.uIManager.boardManager.gameObject.SetActive(false);
         this.gameObject.SetActive(false);
+    }
+
+    public void SetWinImageActiveToFalse()
+    {
+        winImage.gameObject.SetActive(false);
+    }
+    public void SetLoseImageActiveToFalse()
+    {
+        loseImage.gameObject.SetActive(false);
     }
 }

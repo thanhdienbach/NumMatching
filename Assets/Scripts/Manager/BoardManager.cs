@@ -30,7 +30,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] List<int> numbers = new List<int>();
     [SerializeField] List<int> baseNumbers1 = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     [SerializeField] List<int> baseNumbers2 = new List<int> { 3, 4, 1, 2, 9, 8, 5, 6, 7 };
-    [SerializeField] Vector2Int[] directions = new Vector2Int[]
+    public Vector2Int[] directions = new Vector2Int[]
     {
         new Vector2Int(-1, -1),
         new Vector2Int(-1, 0),
@@ -53,11 +53,17 @@ public class BoardManager : MonoBehaviour
     [SerializeField] List<int> gemType;
     #endregion
 
-    public void Init(Mode _mode)
+    public void Init()
     {
         gameObject.SetActive(true);
 
         gamePlayManager = GamePlayManager.instance;
+
+        gamePlayManager.state = 1;
+        gamePlayManager.uIManager.playingPanle.SetStateText(gamePlayManager.state);
+        gamePlayManager.addNumbersNumber = 5;
+        gamePlayManager.uIManager.playingPanle.SetAddNumbersNumberText(gamePlayManager.addNumbersNumber);
+        gamePlayManager.uIManager.playingPanle.addNumbersButton.interactable = true;
 
         if (gamePlayManager.mode == Mode.Gem)
         {
@@ -71,7 +77,7 @@ public class BoardManager : MonoBehaviour
 
         GenerateEmptyCell(colums * rows);
 
-        GenerateBoard(gamePlayManager.state, _mode, 0, startCellFilled);
+        GenerateBoard(gamePlayManager.state, GamePlayManager.instance.mode, 0, startCellFilled);
     }
 
     /// <summary>
@@ -120,7 +126,7 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        //ShuffleCellValue(startCellFilled);
+        ShuffleCellValue(startCellFilled);
 
         int pairNumbersCount = 0;
         if (_state == 1)
@@ -187,7 +193,7 @@ public class BoardManager : MonoBehaviour
         }
         return null;
     }
-    Cell GetCellAt(Vector2Int _position)
+    public Cell GetCellAt(Vector2Int _position)
     {
         foreach (var cell in cells)
         {
@@ -327,4 +333,13 @@ public class BoardManager : MonoBehaviour
         gemType.Remove(gemType[randomIndex]);
     }
     #endregion
+
+    public void ClearBoardData()
+    {
+        for (int i = 0; i < cells.Count; i++)
+        {
+            Destroy(cells[i].gameObject);
+        }
+        cells.Clear();
+    }
 }

@@ -27,7 +27,7 @@ public class GamePlayManager : MonoBehaviour
     [Header("Component")]
     [SerializeField] AudioManager audioManager;
     public UIManager uIManager;
-    [SerializeField] BoardManager boardManager;
+    public BoardManager boardManager;
     [SerializeField] PlayingPanle playingPanle;
 
     [Header("Matching number variable")]
@@ -57,8 +57,6 @@ public class GamePlayManager : MonoBehaviour
     }
     public void Init()
     {
-        addNumbersNumber = 5;
-
         audioManager = GetComponentInChildren<AudioManager>();
         audioManager.Init();
 
@@ -199,8 +197,14 @@ public class GamePlayManager : MonoBehaviour
         audioManager.PlayAudioClipOneShot(audioManager.pairClear);
         if (mode == Mode.Gem)
         {
-            UpdateGemCollect(_cell1);
-            UpdateGemCollect(_cell2);
+            if (UpdateGemCollect(_cell1))
+            {
+                return;
+            }
+            if (UpdateGemCollect(_cell2))
+            {
+                return;
+            }
         }
         cell1.FrezeeCell();
         cell2.FrezeeCell();
@@ -213,6 +217,11 @@ public class GamePlayManager : MonoBehaviour
         cell2 = null;
 
         countAllNumbers -= 2;
+
+        if (IsLoseGame())
+        {
+            LoseGameHandle();
+        }
 
         CheckCountAllNumbers();
     }
@@ -278,7 +287,6 @@ public class GamePlayManager : MonoBehaviour
     #region Add numbers handle
     public void AddNumberHandle()
     {
-        Debug.Log("Add number handle");
         UpdateAddNumbersNumber();
 
         List<int> cloneNumbers = GetNumberList();
@@ -295,6 +303,11 @@ public class GamePlayManager : MonoBehaviour
         }
 
         countAllNumbers *= 2;
+
+        if (IsLoseGame())
+        {
+            LoseGameHandle();
+        }
     }
     void UpdateAddNumbersNumber()
     {
@@ -339,6 +352,64 @@ public class GamePlayManager : MonoBehaviour
     #endregion
 
     #region Statehandle
+    bool IsLoseGame()
+    {
+        return OutOfMatchableCells() && addNumbersNumber == 0;
+    }
+    public bool OutOfMatchableCells()
+    {
+        int countDirection = 0;
+        for (int i = 0; i < boardManager.cells.Count; i ++)
+        {
+            Cell currentCell = boardManager.cells[i];
+            if (currentCell.isMatched)
+            {
+                continue;
+            }
+            countDirection = 0;
+            foreach (var dirention in boardManager.directions)
+            {
+                if (HasCellCanMatchOnThisDirection(currentCell, dirention))
+                {
+                    return false;
+                }
+                else
+                {
+                    countDirection++;
+                }
+            }
+        }
+        Debug.Log(countDirection);
+        Debug.Log(countDirection == 8);
+        return countDirection == 8;
+    }
+    bool HasCellCanMatchOnThisDirection(Cell _cell, Vector2Int _direction)
+    {
+        Vector2Int nextPosition = _cell.position + _direction;
+        for (int i = 0;i < 100;i ++)
+        {
+            Cell nextCell = boardManager.GetCellAt(nextPosition);
+            if (nextCell == null)
+            {
+                return false;
+            }
+            else if (!nextCell.isMatched && (nextCell.value != _cell.value && nextCell.value + _cell.value != boardManager.minValueOfCell + boardManager.maxValueOfCell))
+            {
+                return false;
+            }
+            else if (nextCell.isMatched)
+            {
+                nextPosition += _direction;
+            }
+            else if (!nextCell.isMatched && (nextCell.value == _cell.value || nextCell.value + _cell.value == boardManager.minValueOfCell + boardManager.maxValueOfCell))
+            {
+                _cell.text.color = Color.gray;
+                nextCell.text.color = Color.gray;
+                return true;
+            }
+        }
+        return false;
+    }
     void CheckCountAllNumbers()
     {
         if (countAllNumbers == 0)
@@ -349,7 +420,7 @@ public class GamePlayManager : MonoBehaviour
     void GenerateNewBoard(int _firstIndexWillAddNumber, int _countOfAddNumbers)
     {
         state += 1;
-        playingPanle.SetAddStateText(state);
+        playingPanle.SetStateText(state);
 
         addNumbersNumber = 5;
         playingPanle.SetAddNumbersNumberText(addNumbersNumber);
@@ -359,7 +430,7 @@ public class GamePlayManager : MonoBehaviour
     #endregion
 
     #region Gem mode
-    void UpdateGemCollect(Cell _cell)
+    bool UpdateGemCollect(Cell _cell)
     {
         if (_cell.gemType == GemType.Gem1)
         {
@@ -376,11 +447,25 @@ public class GamePlayManager : MonoBehaviour
         if (currentNumberOfGem1NeedToCollect == 0 && currentNumberOfGem2NeedToCollect == 0)
         {
             WinGemModeHandle();
+            return true;
         }
+        return false;
     }
     void WinGemModeHandle()
     {
-        Debug.Log("You win");
+        playingPanle.winImage.gameObject.SetActive(true);
+
+        for (int i = 0; i < GamePlayManager.instance.uIManager.boardManager.cells.Count; i++)
+        {
+            Destroy(GamePlayManager.instance.uIManager.boardManager.cells[i].gameObject);
+        }
+        GamePlayManager.instance.uIManager.boardManager.cells.Clear();
+        boardManager.gameObject.SetActive(false);
+    }
+    void LoseGameHandle()
+    {
+        playingPanle.loseImage.gameObject.SetActive(true);
+
     }
     #endregion
 }

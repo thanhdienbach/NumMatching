@@ -28,8 +28,8 @@ public class ModePanle : MonoBehaviour
     {
         gamePlayManager.mode = Mode.Classic;
 
-        uiManager.playingPanle.Init(gamePlayManager.mode);
-        uiManager.boardManager.Init(gamePlayManager.mode);
+        uiManager.playingPanle.Init();
+        uiManager.boardManager.Init();
         this.gameObject.SetActive(false);
     }
 
@@ -37,8 +37,8 @@ public class ModePanle : MonoBehaviour
     {
         gamePlayManager.mode = Mode.Gem;
 
-        uiManager.playingPanle.Init(gamePlayManager.mode);
-        uiManager.boardManager.Init(gamePlayManager.mode);
+        uiManager.playingPanle.Init();
+        uiManager.boardManager.Init();
 
         this.gameObject.SetActive(false);
     }

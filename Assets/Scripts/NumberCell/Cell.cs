@@ -18,9 +18,10 @@ public class Cell : MonoBehaviour
     public Vector2Int position;
     public int value;
     public bool isMatched = true;
-    public bool canMatching;
+    public bool hasPair = false;
     public bool isGemCell;
     public GemType gemType = GemType.None;
+    public string gemID; // Handle gems was created the same time can't matching together
 
     private void OnEnable()
     {

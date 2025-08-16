@@ -61,8 +61,7 @@ public class BoardManager : MonoBehaviour
 
         gamePlayManager.state = 1;
         gamePlayManager.uIManager.playingPanle.SetStateText(gamePlayManager.state);
-        gamePlayManager.addNumbersNumber = 5;
-        gamePlayManager.uIManager.playingPanle.SetAddNumbersNumberText(gamePlayManager.addNumbersNumber);
+        gamePlayManager.addNumbersNumber = 6;
         gamePlayManager.uIManager.playingPanle.addNumbersButton.interactable = true;
 
         if (gamePlayManager.mode == Mode.Gem)
@@ -78,6 +77,9 @@ public class BoardManager : MonoBehaviour
         GenerateEmptyCell(colums * rows);
 
         GenerateBoard(gamePlayManager.state, GamePlayManager.instance.mode, 0, startCellFilled);
+
+        gamePlayManager.addNumbersNumber--;
+        gamePlayManager.uIManager.playingPanle.SetAddNumbersNumberText(gamePlayManager.addNumbersNumber);
     }
 
     /// <summary>
@@ -181,13 +183,16 @@ public class BoardManager : MonoBehaviour
         foreach (var direction in directions)
         {
             Vector2Int position = _cell.position + direction;
-            Cell nextCell = GetCellAt(position);
-            if (nextCell == null)
+            Cell nextCell = GetCellAt(position);            if (nextCell == null)
             {
 
             }
-            else if (nextCell.value == _cell.value || nextCell.value + _cell.value == minValueOfCell + maxValueOfCell)
+            else if ((nextCell.value == _cell.value || nextCell.value + _cell.value == minValueOfCell + maxValueOfCell) && !nextCell.hasPair)
             {
+                if (nextCell.isGemCell && nextCell.gemID == _cell.gemID)
+                {
+                    continue;
+                }
                 return nextCell;
             }
         }
@@ -206,49 +211,54 @@ public class BoardManager : MonoBehaviour
     }
     void ArrangePairNumber(int _pairNumbersCount)
     {
-        for (int i = 0; i < _pairNumbersCount; i++)
+        int pairNumberscount = 0;
+        while (pairNumberscount < _pairNumbersCount)
         {
             int indexCell1 = Random.Range(0, startCellFilled);
             Cell cell1 = cells[indexCell1];
+            int indexCell2 = Random.Range(0, startCellFilled);
+            Cell cell2 = cells[indexCell2];
 
-            for (int j = 0; j < 1000; j++) 
+
+            if (cell1.value != cell2.value && cell1.value + cell2.value != minValueOfCell + maxValueOfCell && (!cell1.hasPair && !cell2.hasPair))
             {
-                int indexCell2 = Random.Range(0, startCellFilled);
-                Cell cell2 = cells[indexCell2];
-                if ( cell1.value != cell2.value && cell1.value + cell2.value != minValueOfCell + maxValueOfCell && !cell1.canMatching && !cell2.canMatching)
-                {
-                    int temp = cell1.value;
-                    cell1.value = cell2.value;
-                    cell2.value = temp;
+                int temp = cell1.value;
+                cell1.value = cell2.value;
+                cell2.value = temp;
 
-                    Cell cellCanMatchCell1 = CanMatchWithCell(cell1);
-                    Cell cellCanMatchCell2 = CanMatchWithCell(cell2);
-                    if ( (cellCanMatchCell1 != null) ^ (cellCanMatchCell2 != null) )
+                Cell cellCanMatchCell1 = CanMatchWithCell(cell1);
+                Cell cellCanMatchCell2 = CanMatchWithCell(cell2);
+
+                if ((cellCanMatchCell1 != null) ^ (cellCanMatchCell2 != null)) // Chỉ lấy 1 cặp cell có thê match với nhau trong một lần đổi cặp số.
+                {
+                    cell1.AwakeCell(cell1.value);
+                    cell2.AwakeCell(cell2.value);
+
+                    if (cellCanMatchCell1 != null)
                     {
-                        cell1.AwakeCell(cell1.value);
-                        cell1.canMatching = true;
-                        if ( cellCanMatchCell1 != null )
-                        {
-                            cell1.text.color = Color.gray;
-                            cellCanMatchCell1.text.color = Color.gray;
-                        }
-                        cell2.AwakeCell(cell2.value);
-                        cell2.canMatching = true;
-                        if (cellCanMatchCell2 != null)
-                        {
-                            cell2.text.color = Color.gray;
-                            cellCanMatchCell2.text.color = Color.gray;
-                        }
-                        break;
+                        TickCell(cell1, cellCanMatchCell1);
                     }
-                    else
+
+                    if (cellCanMatchCell2 != null)
                     {
-                        cell2.value = cell1.value;
-                        cell1.value = temp;
+                        TickCell(cell2, cellCanMatchCell2);
                     }
+                    pairNumberscount++;
+                }
+                else
+                {
+                    cell2.value = cell1.value;
+                    cell1.value = temp;
                 }
             }
         }
+    }
+    void TickCell(Cell _cellA, Cell _cellB)
+    {
+        _cellA.text.color = Color.gray;
+        _cellB.text.color = Color.gray;
+        _cellA.hasPair = true;
+        _cellB.hasPair = true;
     }
     #endregion
 
@@ -318,6 +328,7 @@ public class BoardManager : MonoBehaviour
         if (gemType.Count == 0) { return; }
 
         _cell.isGemCell = true;
+        _cell.gemID = "000" + gamePlayManager.state + "000" + gamePlayManager.addNumbersNumber;
 
         int randomIndex = Random.Range(0, gemType.Count);
         if (gemType[randomIndex] == 1)

@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class PlayingPanle : MonoBehaviour
 {
 
-    [Header("Enement")]
     public TMP_Text addNumbersNumberText;
     public Button addNumbersButton;
 

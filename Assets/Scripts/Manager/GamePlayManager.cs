@@ -143,7 +143,23 @@ public class GamePlayManager : MonoBehaviour
     }
     bool IsRightValue(Cell _cell1, Cell _cell2)
     {
-        return (_cell1.value == _cell2.value || _cell1.value + _cell2.value == boardManager.minValueOfCell + boardManager.maxValueOfCell) && !(_cell1.isGemCell && _cell2.isGemCell);
+        bool isCreatedSameTimeGem = false;
+        if (mode == Mode.Gem)
+        {
+            if ((_cell1.isGemCell && _cell2.isGemCell) && (_cell1.gemID == _cell2.gemID))
+            {
+                isCreatedSameTimeGem = false;
+            }
+            else
+            {
+                isCreatedSameTimeGem = true;
+            }
+        }
+        else
+        {
+            isCreatedSameTimeGem = true;
+        }
+        return (_cell1.value == _cell2.value || _cell1.value + _cell2.value == boardManager.minValueOfCell + boardManager.maxValueOfCell) && isCreatedSameTimeGem;
     }
     bool IsClearPath(Cell _cell1, Cell _cell2)
     {
@@ -287,8 +303,7 @@ public class GamePlayManager : MonoBehaviour
     #region Add numbers handle
     public void AddNumberHandle()
     {
-        UpdateAddNumbersNumber();
-
+        
         List<int> cloneNumbers = GetNumberList();
         if (cloneNumbers.Count > boardManager.cells.Count - firstCellFreezeIndex)
         {
@@ -301,6 +316,8 @@ public class GamePlayManager : MonoBehaviour
         {
             boardManager.GenerateGem(firstCellFreezeIndex, cloneNumbers.Count);
         }
+
+        UpdateAddNumbersNumber();
 
         countAllNumbers *= 2;
 
@@ -379,8 +396,6 @@ public class GamePlayManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log(countDirection);
-        Debug.Log(countDirection == 8);
         return countDirection == 8;
     }
     bool HasCellCanMatchOnThisDirection(Cell _cell, Vector2Int _direction)
@@ -393,7 +408,7 @@ public class GamePlayManager : MonoBehaviour
             {
                 return false;
             }
-            else if (!nextCell.isMatched && (nextCell.value != _cell.value && nextCell.value + _cell.value != boardManager.minValueOfCell + boardManager.maxValueOfCell))
+            else if (!nextCell.isMatched && (nextCell.value != _cell.value && nextCell.value + _cell.value != boardManager.minValueOfCell + boardManager.maxValueOfCell) || (nextCell.isGemCell && nextCell.gemID == _cell.gemID))
             {
                 return false;
             }
